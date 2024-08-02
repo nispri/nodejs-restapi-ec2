@@ -38,7 +38,7 @@ jobs:
     - run: npm ci
 
     - name: Run ESLint
-      run: npx eslint . --ext .js,.jsx,.ts,.tsx
+      run: npx eslint .
 
     - name: Format Code
       run: npx prettier --check .
