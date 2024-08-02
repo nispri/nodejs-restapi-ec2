@@ -5,11 +5,10 @@ name: Node.js CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
-
     runs-on: self-hosted
 
     strategy:
@@ -18,61 +17,61 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Cache Node.js modules
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-          ${{ runner.os }}-
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            ${{ runner.os }}-
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - run: npm ci
+      - run: npm ci
 
-    #- name: Run ESLint
-    #  run: npx eslint .
+      #- name: Run ESLint
+      #  run: npx eslint .
 
-    - name: Format Code
-      run: npx prettier --check .
+      - name: Format Code
+        run: npx prettier --check .
 
-    - name: Fix Formatting Issues
-      run: |
-        npx prettier --write .
-        git config --global user.name "github-actions"
-        git config --global user.email "actions@github.com"
-        git add .
-        git commit -m "Auto-fix formatting issues" || echo "No changes to commit"
-        git push
-      
-    - run: |
-        touch .env
-        echo "${{ secrets.PROD_ENV_FILE }}" > .env
+      - name: Fix Formatting Issues
+        run: |
+          npx prettier --write .
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-fix formatting issues" || echo "No changes to commit"
+          git push
 
-    #- run: pm2 restart BackendAPI
+      - run: |
+          touch .env
+          echo "${{ secrets.PROD_ENV_FILE }}" > .env
 
-    - name: Run Tests
-      run: npm test
+      #- run: pm2 restart BackendAPI
 
-    - name: Run Test Coverage
-      run: npm run test:coverage
+      - name: Run Tests
+        run: npm test
 
-    - name: Run Vulnerability Scan
-      run: npm audit --production --audit-level=high
+      - name: Run Test Coverage
+        run: npm run test:coverage
 
-    - run: |
-        # Check if BackendAPI is running
-        if pm2 list | grep -q 'BackendAPI'; then
-          echo "BackendAPI is running, restarting..."
-          pm2 start server.js --name=BackendAPI
-        else
-          echo "BackendAPI is not running, starting..."
-          pm2 start BackendAPI
-        fi
+      - name: Run Vulnerability Scan
+        run: npm audit --production --audit-level=high
+
+      - run: |
+          # Check if BackendAPI is running
+          if pm2 list | grep -q 'BackendAPI'; then
+            echo "BackendAPI is running, restarting..."
+            pm2 start server.js --name=BackendAPI
+          else
+            echo "BackendAPI is not running, starting..."
+            pm2 start BackendAPI
+          fi

@@ -2,10 +2,7 @@
 const { defineConfig } = require('eslint');
 
 module.exports = defineConfig({
-  extends: [
-    'airbnb-base',
-    'plugin:@typescript-eslint/recommended'
-  ],
+  extends: ['airbnb-base', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   rules: {
@@ -17,6 +14,6 @@ module.exports = defineConfig({
     {
       files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
       // Override specific settings for different file types
-    }
-  ]
+    },
+  ],
 });
