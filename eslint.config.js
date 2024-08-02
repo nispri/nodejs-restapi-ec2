@@ -1,13 +1,10 @@
-// eslint.config.js
+// .eslintrc.js (traditional format)
 module.exports = {
-    root: true,
-    extends: ['airbnb-base', 'plugin:@typescript-eslint/recommended'],
-    env: {
-      browser: true,
-      node: true,
-      jest: true,
-    },
-    parser: '@typescript-eslint/parser', // If you use TypeScript
+    extends: [
+      'airbnb-base',
+      'plugin:@typescript-eslint/recommended'
+    ],
+    parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint'],
     rules: {
       'no-console': 'warn',
@@ -18,7 +15,7 @@ module.exports = {
       {
         files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
         // Override specific settings for different file types
-      },
-    ],
+      }
+    ]
   };
   
