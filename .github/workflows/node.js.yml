@@ -33,7 +33,7 @@ jobs:
         # Check if BackendAPI is running
         if pm2 list | grep -q 'BackendAPI'; then
           echo "BackendAPI is running, restarting..."
-          pm2 restart BackendAPI
+          pm2 start server.js --name=BackendAPI
         else
           echo "BackendAPI is not running, starting..."
           pm2 start BackendAPI
