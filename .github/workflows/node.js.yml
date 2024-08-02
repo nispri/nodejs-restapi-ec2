@@ -19,22 +19,39 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
+    - name: Cache Node.js modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+          ${{ runner.os }}-
+
     - run: npm ci
+
     - run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
+
     #- run: pm2 restart BackendAPI
+
     - name: Run Tests
       run: npm test
+
     - name: Run Test Coverage
       run: npm run test:coverage
+
     - name: Run Vulnerability Scan
       run: npm audit --production --audit-level=high
+      
     - run: |
         # Check if BackendAPI is running
         if pm2 list | grep -q 'BackendAPI'; then
