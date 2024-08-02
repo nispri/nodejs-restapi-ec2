@@ -20,12 +20,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-
     - name: Cache Node.js modules
       uses: actions/cache@v3
       with:
@@ -35,7 +29,19 @@ jobs:
           ${{ runner.os }}-node-
           ${{ runner.os }}-
 
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
     - run: npm ci
+
+    - name: Run ESLint
+      run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+    - name: Format Code
+      run: npx prettier --check .
 
     - run: |
         touch .env
@@ -51,7 +57,7 @@ jobs:
 
     - name: Run Vulnerability Scan
       run: npm audit --production --audit-level=high
-      
+
     - run: |
         # Check if BackendAPI is running
         if pm2 list | grep -q 'BackendAPI'; then
