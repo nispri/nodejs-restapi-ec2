@@ -29,6 +29,12 @@ jobs:
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
     #- run: pm2 restart BackendAPI
+    - name: Run Tests
+      run: npm test
+    - name: Run Test Coverage
+      run: npm run test:coverage
+    - name: Run Vulnerability Scan
+      run: npm audit --production --audit-level=high
     - run: |
         # Check if BackendAPI is running
         if pm2 list | grep -q 'BackendAPI'; then
