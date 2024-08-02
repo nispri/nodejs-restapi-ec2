@@ -19,12 +19,13 @@
         "mongoose": "^7.1.1"
     },
     "devDependencies": {
-      "jest": "^27.0.0"
+        "jest": "^27.0.0",
+        "prettier": "^3.3.3"
     },
     "jest": {
-    "testMatch": [
-      "**/tests/**/*.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[tj]s?(x)"
-    ]
-  }
+        "testMatch": [
+            "**/tests/**/*.[jt]s?(x)",
+            "**/?(*.)+(spec|test).[tj]s?(x)"
+        ]
+    }
 }
