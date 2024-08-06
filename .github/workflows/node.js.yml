@@ -65,13 +65,14 @@ jobs:
 
       - name: Run Vulnerability Scan
         run: npm audit --production --audit-level=high
-
+    
+                
       - run: |
           # Check if BackendAPI is running
           if pm2 list | grep -q 'BackendAPI'; then
             echo "BackendAPI is running, restarting..."
-            pm2 start server.js --name=BackendAPI
+            pm2 restart BackendAPI || echo "Failed to restart BackendAPI"
           else
             echo "BackendAPI is not running, starting..."
-            pm2 start BackendAPI
+            pm2 start server.js --name BackendAPI || echo "Failed to start BackendAPI"
           fi
