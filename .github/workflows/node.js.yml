@@ -68,6 +68,11 @@ jobs:
       - name: Run Vulnerability Scan
         run: npm audit --production --audit-level=high
 
+      - name: Ensure SonarQube Container is Running
+        run: |
+          docker ps | grep -q 'sonar' || docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+          sleep 30  # Wait for SonarQube to fully start
+
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
