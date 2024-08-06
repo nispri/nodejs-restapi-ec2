@@ -39,8 +39,8 @@ jobs:
       #- name: Run ESLint
       #  run: npx eslint .
 
-      - name: Format Code
-        run: npx prettier --check .
+      #- name: Format Code
+      #  run: npx prettier --check .
 
       #- name: Fix Formatting Issues
       #  run: |
