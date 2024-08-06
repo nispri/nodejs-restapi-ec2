@@ -66,8 +66,15 @@ jobs:
       - name: Run Vulnerability Scan
         run: npm audit --production --audit-level=high
     
-                
-      - run: |
+       - name: Check and Restart BackendAPI with PM2
+        run: |
+          # Install PM2 if not already installed
+          npm install -g pm2
+
+          # List PM2 processes
+          echo "Current PM2 processes:"
+          pm2 list
+
           # Check if BackendAPI is running
           if pm2 list | grep -q 'BackendAPI'; then
             echo "BackendAPI is running, restarting..."
@@ -76,3 +83,12 @@ jobs:
             echo "BackendAPI is not running, starting..."
             pm2 start server.js --name BackendAPI || echo "Failed to start BackendAPI"
           fi
+
+          # Verify the status of BackendAPI
+          echo "PM2 status after operation:"
+          pm2 list
+
+          
+  
+
+          
