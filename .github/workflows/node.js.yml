@@ -70,7 +70,15 @@ jobs:
 
       - name: Ensure SonarQube Container is Running
         run: |
-          docker ps | grep -q 'sonar' || docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+          if [ "$(docker ps -q -f name=sonar)" ]; then
+            echo "SonarQube container is already running."
+          elif [ "$(docker ps -aq -f status=exited -f name=sonar)" ]; then
+            echo "SonarQube container exists but is stopped. Restarting..."
+            docker start sonar
+          else
+            echo "SonarQube container does not exist. Creating and starting..."
+            docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+          fi
           sleep 30  # Wait for SonarQube to fully start
 
       - uses: sonarsource/sonarqube-scan-action@master
